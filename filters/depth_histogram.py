@@ -1,15 +1,18 @@
 import vcf
 import pysam
+import argparse
+import sys
 
-def parseVCF(file):
-	try:
-        vcf_input = vcf.Reader(filename=file)
+def parseVCF(input):
+    print("Starting VCF parsing.", file=sys.stderr)
+    try:
+        vcf_input = vcf.Reader(input)
     except:
-        print("Invalid VCF format.")
+        print("Invalid VCF format.", file=sys.stderr)
         return None
 
     #set up dict
-    counts={}    
+    counts=dict() 
     
     #set up progress tracker
     lines=0
@@ -19,11 +22,13 @@ def parseVCF(file):
         depth=0
         lines+=1
         if lines % 10000 == 0:
-            print("Processed ", lines % 10000, "0000 lines.")
+            print("Processed ", lines, " lines.", file=sys.stderr)
 
         try:
             depth=record.INFO['DP']
-        
+        except:        
+            depth=0
+
         if depth in counts:
             counts[depth]+=1
         else:
@@ -35,12 +40,17 @@ def parseVCF(file):
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Compute depth histogram from VCF file based on DP INFO field')
-    parser.add_argument('infile', help='VCF file to process, can be bgzipped', action='store')
+    parser.add_argument('infile', help='VCF file to process, can be bgzipped, use - for STDIN', action='store')
     opts = parser.parse_args()
     
-    with open(opts.infile, 'r') as vin:
-        #counts is a dict with key->depth, value->count
-        counts=parseVCF(vin)
-        #print to standard out
+    if opts.infile == "-":
+        inp=sys.stdin
+    else:
+        inp=file(opts.infile)
+
+    #counts is a dict with key->depth, value->count
+    counts=parseVCF(inp)
+    #print to standard out
+    if counts != None:
         for depth in counts:
-            print(x, "\t", counts[depth], "\n")
+            print(x, "\t", counts[depth])
