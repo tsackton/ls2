@@ -130,7 +130,7 @@ if __name__=="__main__":
     parser.add_argument('--depth', default='depth.out', help='Output file for depth', action='store')
     parser.add_argument('--chr', default='chr_coverage.out', help='Output file for zero coverage per chromosome', action='store')
     parser.add_argument('--samp_depth', default='mean_called_sample_depth.out', help='Output file for mean depth per sample', action='store')
-    parser.add_argument('--samp_count', default='called_sample_counts.out', cdhelp='Output file for number of samples called', action='store')
+    parser.add_argument('--samp_count', default='called_sample_counts.out', help='Output file for number of samples called', action='store')
     opts = parser.parse_args()
     
     #three tasks: 
