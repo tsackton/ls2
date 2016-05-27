@@ -139,11 +139,11 @@ if __name__=="__main__":
     #third print out information in both raw and summary forms
     
     #get_files is a function that takes a species name and returns the full path to the fai file, the VCF file, and the exon bed file
-    print("Getting files for ", opts.species)
+    print("Getting files for", opts.species)
     species_files = get_files(opts.species)
     chroms = get_chrom_info(species_files['fai'])
     cds = get_cds_info(species_files['bed'])
-    print("Parsing VCF for ", opts.species)
+    print("Parsing VCF for", opts.species)
     counts, chrdepth, dppersamp, numsamples = parse_VCF(species_files['vcf'])
     
     #print out
