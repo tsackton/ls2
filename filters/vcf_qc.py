@@ -1,4 +1,5 @@
-import os, fnmatch, vcf, pysam, glob
+import os, fnmatch, glob, sys
+from pysam import VariantFile as VCF
 
 def find(pattern, path):
     result = []
@@ -58,7 +59,7 @@ def get_cds_info(file):
     
 def parse_VCF(file):
     try:
-        vcf_input = vcf.Reader(filename=file)
+        vcf_input = VCF(file)
     except:
         print("Invalid VCF format.")
         raise
@@ -77,7 +78,7 @@ def parse_VCF(file):
         depth=0
         lines+=1
         if lines % 10000 == 0:
-            print("Processed ", lines % 10000, "0000 lines.")
+            print("Processed ", lines % 10000, "0000 lines.", file=sys.stderr)
         try:
             depth=record.INFO['DP']
         #increment chrdepth if depth is 0
@@ -126,7 +127,7 @@ if __name__=="__main__":
     parser.add_argument('--depth', default='depth.out', help='Output file for depth', action='store')
     parser.add_argument('--chr', default='chr_coverage.out', help='Output file for zero coverage per chromosome', action='store')
     parser.add_argument('--samp_depth', default='mean_called_sample_depth.out', help='Output file for mean depth per sample', action='store')
-    parser.add_argument('--samp_count', default='called_sample_counts.out', help='Output file for number of samples called', action='store')
+    parser.add_argument('--samp_count', default='called_sample_counts.out', cdhelp='Output file for number of samples called', action='store')
     opts = parser.parse_args()
     
     #three tasks: 
