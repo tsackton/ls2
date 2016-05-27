@@ -79,7 +79,7 @@ def parse_VCF(file):
         depth=0
         lines+=1
         if lines % 10000 == 0:
-            print("Processed", lines % 10000, "0000 lines.", file=sys.stderr)
+            print("Processed", lines, "lines.", file=sys.stderr)
         try:
             depth=record.info['DP']
         except:
