@@ -1,4 +1,4 @@
-import os, fnmatch, glob, sys
+import os, fnmatch, glob, sys, argparse
 from pysam import VariantFile as VCF
 
 def find(pattern, path):
