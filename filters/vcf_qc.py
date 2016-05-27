@@ -1,4 +1,9 @@
-import os, fnmatch, glob, sys, argparse
+import sys
+if sys.version_info[0] != 3:
+    print("This script requires Python version 3.xx")
+    sys.exit(1)
+
+import os, fnmatch, glob, argparse
 from pysam import VariantFile as VCF
 
 def find(pattern, path):
@@ -112,7 +117,7 @@ def parse_VCF(file):
                 num_samples += 1
         mean_depth = 0
         try:
-            mean_depth = tot_depth / num_samples
+            mean_depth = round(tot_depth / num_samples, 3)
         except ZeroDivisionError:
             pass
         
