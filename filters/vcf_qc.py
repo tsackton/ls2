@@ -49,12 +49,12 @@ def get_cds_info(file):
     cds_results = {}
     with open(file, 'r') as cds:
         for line in cds:
-            (key, start, end) = line.split()[0:2]
-            cds_length = end - start
+            cols = line.split()
+            cds_length = cols[2] - cols[1]
             try:
-                cds_results[key] += cds_length
+                cds_results[cols[0]] += cds_length
             except KeyError:
-                cds_results[key] = cds_length
+                cds_results[cols[0]] = cds_length
     return(cds_results)
     
 def parse_VCF(file):
