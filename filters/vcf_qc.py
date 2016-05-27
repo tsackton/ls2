@@ -72,6 +72,7 @@ def parse_VCF(file):
     
     #set up progress tracker
     lines=0
+    chrom=None
     
     #loop through records
     for record in vcf_input:
