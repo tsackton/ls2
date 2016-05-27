@@ -81,11 +81,11 @@ def parse_VCF(file):
         if lines % 10000 == 0:
             print("Processed", lines % 10000, "0000 lines.", file=sys.stderr)
         try:
-            depth=record.INFO['DP']
+            depth=record.info['DP']
         except:
             pass
         #increment chrdepth if depth is 0
-        chrom=record.CHROM
+        chrom=record.chrom
         if depth == 0:
             try:
                 chrdepth[chrom] += 1
@@ -98,13 +98,14 @@ def parse_VCF(file):
             counts[depth]=1
         #depth per sample
         tot_depth = 0
-        num_samples = record.num_called
+        num_samples = 0
         if depth > 0:
-            for sample in record.samples:
+            for id,sample in record.samples.items():
                 try:
-                    tot_depth += sample.data['DP']
+                    tot_depth += sample.get('DP')
                 except:
-                     pass
+                    continue
+                num_samples += 1
         mean_depth = 0
         try:
             mean_depth = tot_depth / num_samples
