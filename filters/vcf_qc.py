@@ -50,7 +50,7 @@ def get_cds_info(file):
     with open(file, 'r') as cds:
         for line in cds:
             cols = line.split()
-            cds_length = cols[2] - cols[1]
+            cds_length = int(cols[2]) - int(cols[1])
             try:
                 cds_results[cols[0]] += cds_length
             except KeyError:
