@@ -38,6 +38,7 @@ def get_chrom_info(file):
     chrom_results = {}
     with open(file, 'r') as cfile:
         for line in cfile:
+            print(line)
             (key, val) = line.split("\t")[0:1]
             if key in chrom_results:
                 raise ValueError("Saw same key twice in " + file)
