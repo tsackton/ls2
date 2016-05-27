@@ -144,9 +144,7 @@ if __name__=="__main__":
     chroms = get_chrom_info(species_files['fai'])
     cds = get_cds_info(species_files['bed'])
     print("Parsing VCF for ", opts.species)
-    with open(species_files['vcf'], 'r') as vin:
-        #vcf results 
-        counts, chrdepth, dppersamp, numsamples = parse_VCF(vin)
+    counts, chrdepth, dppersamp, numsamples = parse_VCF(species_files['vcf'])
     
     #print out
     with open(opts.depth, 'w') as dfile:
