@@ -38,12 +38,11 @@ def get_chrom_info(file):
     chrom_results = {}
     with open(file, 'r') as cfile:
         for line in cfile:
-            print(line)
-            (key, val) = line.split("\t")[0:1]
-            if key in chrom_results:
+            cols = line.split("\t")
+            if cols[0] in chrom_results:
                 raise ValueError("Saw same key twice in " + file)
             else:
-                chrom_results[key] = value
+                chrom_results[cols[0]] = cols[1]
     return(chrom_results)
 
 def get_cds_info(file):
