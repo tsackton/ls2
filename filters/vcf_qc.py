@@ -82,6 +82,8 @@ def parse_VCF(file):
             print("Processed ", lines % 10000, "0000 lines.", file=sys.stderr)
         try:
             depth=record.INFO['DP']
+        except:
+            pass
         #increment chrdepth if depth is 0
         chrom=record.CHROM
         if depth == 0:
