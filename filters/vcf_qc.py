@@ -25,7 +25,7 @@ def get_files(species):
         vcf_file = max(glob.glob(species + '/*.vcf.gz'), key=os.path.getctime)
         file_results['vcf'] = vcf_file
     except ValueError:
-        print("Cannot find a vcf file for " + species "! Please check.")   
+        print("Cannot find a vcf file for ", species, "! Please check.", sep="", file=sys.stderr)   
     #bed file should be in bedfiles directory
     bed_file = "./BEDFILES/" + species + ".cds.bed"
     file_results['bed']=bed_file
