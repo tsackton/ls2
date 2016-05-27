@@ -9,7 +9,7 @@ def find(pattern, path):
                 result.append(os.path.join(root, name))
     return result
 
-def get_files(species):
+def get_files(species,cds):
     file_results = {} 
     vcf_file = None
     fai_file = []
@@ -21,8 +21,12 @@ def get_files(species):
         print("Multiple fai files in " + species + " genome directory! Using first one encountered, please check.")   
     file_results['fai'] = fai_file[0]
     #vcf file should be newest *.vcf.gz in species directory
+    vcfglob = species + '/*.vcf.gz'
+    if cds:
+        vcfglob = './CDSVCF/' + species + '*.vcf.gz'
+        
     try:
-        vcf_file = max(glob.glob(species + '/*.vcf.gz'), key=os.path.getctime)
+        vcf_file = max(glob.glob(vcfglob), key=os.path.getctime)
         file_results['vcf'] = vcf_file
     except ValueError:
         print("Cannot find a vcf file for ", species, "! Please check.", sep="", file=sys.stderr)   
@@ -132,6 +136,7 @@ if __name__=="__main__":
     parser.add_argument('--chr', default='chr_coverage.out', help='Output file for zero coverage per chromosome', action='store')
     parser.add_argument('--samp_depth', default='mean_called_sample_depth.out', help='Output file for mean depth per sample', action='store')
     parser.add_argument('--samp_count', default='called_sample_counts.out', help='Output file for number of samples called', action='store')
+    parser.add_argument('--cds', action="store_true", help='Compute stats on genome-wide VCF or CDS-only VCF?')
     opts = parser.parse_args()
     
     #three tasks: 
@@ -141,7 +146,7 @@ if __name__=="__main__":
     
     #get_files is a function that takes a species name and returns the full path to the fai file, the VCF file, and the exon bed file
     print("Getting files for", opts.species)
-    species_files = get_files(opts.species)
+    species_files = get_files(opts.species,opts.cds)
     chroms = get_chrom_info(species_files['fai'])
     cds = get_cds_info(species_files['bed'])
     print("Parsing VCF for", opts.species)
