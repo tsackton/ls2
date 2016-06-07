@@ -29,7 +29,7 @@ def get_files(species,cds,invcf):
     file_results['fai'] = fai_file[0]
     #vcf file should be newest *.vcf.gz in species directory
     if invcf:
-        file_results['vcf'] = invcf
+        vcf_file = invcf
     else:
         vcfglob = species + '/*.vcf.gz'
         if cds:
@@ -37,11 +37,11 @@ def get_files(species,cds,invcf):
 
         try:
             vcf_file = max(glob.glob(vcfglob), key=os.path.getctime)
-            file_results['vcf'] = vcf_file
         except ValueError:
             print("Cannot find a vcf file for ", species, "! Please check.", sep="", file=sys.stderr)   
     #bed file should be in bedfiles directory
     bed_file = "/n/regal/informatics/tsackton/popgen/POLYMORPHISM/BEDFILES/" + species + ".cds.bed"
+    file_results['vcf']=vcf_file
     file_results['bed']=bed_file
     if (vcf_file is None or fai_file is None or bed_file is None):
          raise ValueError("Could not find input files for " + species)
