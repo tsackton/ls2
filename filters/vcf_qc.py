@@ -29,7 +29,7 @@ def get_files(species,cds,invcf):
     file_results['fai'] = fai_file[0]
     #vcf file should be newest *.vcf.gz in species directory
     if invcf:
-        file_results['vcf'] = outgroup
+        file_results['vcf'] = invcf
     else:
         vcfglob = species + '/*.vcf.gz'
         if cds:
