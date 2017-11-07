@@ -38,7 +38,7 @@ def get_files(species,cds,invcf,basedir):
         except ValueError:
             print("Cannot find a vcf file for ", species, "! Please check.", sep="", file=sys.stderr)   
     #bed file should be in bedfiles directory
-    bed_file = basedir + "/genome/" + species + ".cds.bed"
+    bed_file = basedir + "/" + species + "/genome/" + species + ".cds.bed"
     file_results['vcf']=vcf_file
     file_results['bed']=bed_file
     if (vcf_file is None or fai_file is None or bed_file is None):
