@@ -14,16 +14,14 @@ def find(pattern, path):
                 result.append(os.path.join(root, name))
     return result
 
-def get_files(species,cds,invcf):
+def get_files(species,cds,invcf,basedir):
     file_results = {} 
     vcf_file = None
     fai_file = []
     bed_file = None
     #fai file will be in ./species/genome/<something>.fa.fai
-    fai_file = find('*.fa.fai', './' + species + '/genome/')
+    fai_file = find('*.fa.fai', basedir + species + '/genome/')
     #check length of fai_file and throw error if 0 or > 1
-    if not fai_file:
-       fai_file = find('*.fa.fai', '/n/regal/informatics/tsackton/popgen/POLYMORPHISM/' + species + '/genome/')
     if len(fai_file) > 1:
         print("Multiple fai files in " + species + " genome directory! Using first one encountered, please check.")   
     file_results['fai'] = fai_file[0]
@@ -31,7 +29,7 @@ def get_files(species,cds,invcf):
     if invcf:
         vcf_file = invcf
     else:
-        vcfglob = species + '/*.vcf.gz'
+        vcfglob = basedir + species + '/*.vcf.gz'
         if cds:
             vcfglob = './CDSVCF/' + species + '*.vcf.gz'    
 
@@ -40,7 +38,7 @@ def get_files(species,cds,invcf):
         except ValueError:
             print("Cannot find a vcf file for ", species, "! Please check.", sep="", file=sys.stderr)   
     #bed file should be in bedfiles directory
-    bed_file = "/n/regal/informatics/tsackton/popgen/POLYMORPHISM/BEDFILES/" + species + ".cds.bed"
+    bed_file = basedir + "/genome/" + species + ".cds.bed"
     file_results['vcf']=vcf_file
     file_results['bed']=bed_file
     if (vcf_file is None or fai_file is None or bed_file is None):
@@ -148,6 +146,7 @@ if __name__=="__main__":
     parser.add_argument('--samp_count', default='called_sample_counts.out', help='Output file for number of samples called', action='store')
     parser.add_argument('--cds', action="store_true", help='Compute stats on genome-wide VCF or CDS-only VCF?')
     parser.add_argument('--invcf', default=None, help="Use specified VCF file instead of trying to guess.")
+    parser.add_argument('--basedir', default="/n/holylfs/LABS/informatics/tsackton/popgen/POLYMORPHISM/", help="Directory to look for files in.")
     opts = parser.parse_args()
     
     #three tasks: 
@@ -157,7 +156,7 @@ if __name__=="__main__":
     
     #get_files is a function that takes a species name and returns the full path to the fai file, the VCF file, and the exon bed file
     print("Getting files for", opts.species)
-    species_files = get_files(opts.species,opts.cds,opts.invcf)
+    species_files = get_files(opts.species,opts.cds,opts.invcf,opts.basedir)
     chroms = get_chrom_info(species_files['fai'])
     cds = get_cds_info(species_files['bed'])
     print("Parsing VCF for", opts.species)
